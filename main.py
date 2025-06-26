@@ -64,14 +64,12 @@ for i, row in enumerate(data_rows):
             peak_text = cols[3].text.replace(',', '').replace('-', '0').strip()
             if peak_text and peak_text.replace('.', '').isdigit():
                 peak_today = int(float(peak_text))
-        
 
         gain = ""
         if len(cols) > 4:
             gain = cols[4].text.strip()
         elif len(cols) > 3 and not peak_text:
-            gain = cols[3].text.strip()
-        
+            gain = cols[3].text.strip()  
         data.append([rank, name, current_players, peak_today, gain])
         
     except (ValueError, IndexError) as e:
@@ -91,12 +89,12 @@ df["Current"] = df["Current"].astype(int)
 df["Peak"] = df["Peak"].astype(int)
 df.to_csv("steam_top_100.csv", index=False)
 
-print(f"Успешно спарсено {len(df)} игр")
+print(f"Успешно удалось спарсить {len(df)} игр")
 print(df.head(10))
 print(f"Топ игра: {df.iloc[0]['Game']} с {df.iloc[0]['Current']:,} игроков")
 
 if len(df) < 50:
-    print(f"\n⚠️  Получено только {len(df)} игр из ожидаемых 100.")
+    print(f"\n Получено только {len(df)} игр из ожидаемых 100.")
     print("Возможные причины:")
     print("1. Сайт использует JavaScript для загрузки данных")
     print("2. Изменилась структура HTML")
@@ -120,7 +118,7 @@ if df["Peak"].sum() > 0:
     if len(surge) > 0:
         plt.figure(figsize=(12,6))
         sns.barplot(data=surge, x="Surge Ratio", y="Game", hue="Game", palette="mako", legend=False)
-        plt.title("Игры с самым высоким скачком онлайна сегодня")
+        plt.title("Игры с самым высоким скачком онлайна за сегодня")
         plt.xlabel("Peak / Current Ratio")
         plt.tight_layout()
         plt.savefig("visuals/peak_surges.png", dpi=300, bbox_inches='tight')
